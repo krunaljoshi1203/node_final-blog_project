@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | BlogSpace</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="auth-container">
+    <h1>Welcome Back</h1>
+
+    <div class="form-card">
+      <% if (error) { %>
+        <div class="error-msg"><%= error %></div>
+      <% } %>
+
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required placeholder="Enter your username" autofocus>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+      </form>
+
+      <p style="text-align: center; margin-top: 1.25rem; color: var(--text-muted); font-size: 0.9rem;">
+        Don't have an account? <a href="/register" style="color: var(--primary); font-weight: 600;">Register</a>
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>BlogSpace &copy; <%= new Date().getFullYear() %></p>
+  </footer>
+</body>
+</html>

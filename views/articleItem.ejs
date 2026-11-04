@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | BlogSpace</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <article class="article-full">
+      <h1><%= article.title %></h1>
+      <div class="meta">
+        <span>✍️ <%= article.author ? article.author.username : 'Unknown' %></span>
+        <span>📅 <%= new Date(article.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+        <% if (article.author && article.author.role === 'admin') { %>
+          <span class="badge">Admin</span>
+        <% } %>
+      </div>
+
+      <div class="article-content"><%= article.content %></div>
+
+      <% if (user && (user._id.toString() === (article.author ? article.author._id.toString() : '') || user.role === 'admin')) { %>
+        <div class="card-actions" style="margin-top: 1.5rem;">
+          <a href="/articles/<%= article._id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+          <form action="/articles/<%= article._id %>?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirm('Delete this article?');">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      <% } %>
+
+      <div class="comments-section">
+        <h3>Comments (<%= article.comments ? article.comments.length : 0 %>)</h3>
+
+        <% if (article.comments && article.comments.length > 0) { %>
+          <% article.comments.forEach(comment => { %>
+            <div class="comment">
+              <div class="comment-meta">
+                <strong><%= comment.author ? comment.author.username : 'Anonymous' %></strong>
+                · <%= new Date(comment.createdAt).toLocaleDateString() %>
+              </div>
+              <p><%= comment.content %></p>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p style="color: var(--text-muted);">No comments yet. Be the first!</p>
+        <% } %>
+
+        <% if (user) { %>
+          <form action="/articles/<%= article._id %>/comments" method="POST" class="comment-form">
+            <div class="form-group">
+              <label for="content">Add a comment</label>
+              <textarea id="content" name="content" rows="3" required placeholder="Share your thoughts..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+          </form>
+        <% } else { %>
+          <p style="margin-top: 1rem;"><a href="/login">Login</a> to leave a comment.</p>
+        <% } %>
+      </div>
+    </article>
+
+    <div style="margin-top: 1.5rem;">
+      <a href="/" class="btn btn-secondary">← Back to All Articles</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>BlogSpace &copy; <%= new Date().getFullYear() %></p>
+  </footer>
+</body>
+</html>

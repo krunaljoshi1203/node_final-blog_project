@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | BlogSpace</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1><%= article ? 'Edit Article' : 'New Article' %></h1>
+    </div>
+
+    <div class="form-card" style="max-width: 700px;">
+      <% if (error) { %>
+        <div class="error-msg"><%= error %></div>
+      <% } %>
+
+      <form action="<%= article ? '/articles/' + article._id + '?_method=PUT' : '/articles' %>" method="POST">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" value="<%= article ? article.title : '' %>" required placeholder="Enter a captivating title...">
+        </div>
+
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea id="content" name="content" required placeholder="Write your article here..."><%= article ? article.content : '' %></textarea>
+        </div>
+
+        <div class="card-actions">
+          <button type="submit" class="btn btn-primary"><%= article ? 'Update Article' : 'Publish Article' %></button>
+          <a href="/my-articles" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>BlogSpace &copy; <%= new Date().getFullYear() %></p>
+  </footer>
+</body>
+</html>

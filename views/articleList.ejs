@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | BlogSpace</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>All Articles</h1>
+      <p>Discover stories from our community</p>
+    </div>
+
+    <% if (articles && articles.length > 0) { %>
+      <% articles.forEach(article => { %>
+        <article class="article-card">
+          <h2><a href="/articles/<%= article._id %>"><%= article.title %></a></h2>
+          <div class="meta">
+            <span>✍️ <%= article.author ? article.author.username : 'Unknown' %></span>
+            <span>📅 <%= new Date(article.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            <span>💬 <%= article.comments ? article.comments.length : 0 %> comments</span>
+          </div>
+          <p class="article-excerpt"><%= article.content.substring(0, 200) %><%= article.content.length > 200 ? '...' : '' %></p>
+          <div class="card-actions">
+            <a href="/articles/<%= article._id %>" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <div class="empty-state">
+        <h3>No articles yet</h3>
+        <p>Be the first to share your thoughts!</p>
+        <% if (user) { %>
+          <a href="/articles/new" class="btn btn-primary" style="margin-top: 1rem;">Write an Article</a>
+        <% } else { %>
+          <a href="/register" class="btn btn-primary" style="margin-top: 1rem;">Join Now</a>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+
+  <footer>
+    <p>BlogSpace &copy; <%= new Date().getFullYear() %> — Built with Node.js, Express & MongoDB</p>
+  </footer>
+</body>
+</html>
